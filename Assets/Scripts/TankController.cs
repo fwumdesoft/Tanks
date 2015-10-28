@@ -22,7 +22,6 @@ public class TankController : MonoBehaviour
 		float barrelRotX = -Input.GetAxis("Mouse Y") * turretRotationSpeed * Time.deltaTime;
 		turret.Rotate(0, turretRotY, 0);
 		barrel.Rotate(barrelRotX, 0, 0);
-		Mathf.Clamp(barrel.rotation.x, 50f, 95f);
 		Camera.main.transform.RotateAround(turret.position, Vector3.up, turretRotY);
 	}
 }
