@@ -15,20 +15,20 @@ public class TankController : MonoBehaviour
 	[System.Serializable]
 	public struct ShellProperties
 	{
-		public Vector3 initialMagnitude;
-		public Vector3 deltaMagnitude;
+		public float initialMagnitude;
+		public float deltaMagnitude;
 		public float maxMagnitude;
 	}
 
 	public GameObject shellPrefab;
 	public ShellProperties shellProperties;
+	public TurretProperties turretProperties;
 	public float tankMoveSpeed = 10f;
 	public float yRotationSpeed = 10f;
-	public TurretProperties turretProperties;
 
 	Rigidbody rb;
-	Transform turret, barrel;
-	Vector3 shellForce;
+	Transform turret, barrel, shell;
+	float shellMagnitude;
 
 	void Start()
 	{
@@ -50,16 +50,18 @@ public class TankController : MonoBehaviour
 	void FixedUpdate()
 	{
 		if(Input.GetButtonDown("Fire1"))
-			shellForce = shellProperties.initialForce;
+		{
+			shellMagnitude = shellProperties.initialMagnitude;
+		}
 		else if(Input.GetButton("Fire1"))
 		{
-			shellForce += shellProperties.deltaForce;
-			if(shellForce.)
+			shellMagnitude += shellProperties.deltaMagnitude;
+			Mathf.Clamp(shellMagnitude, shellProperties.initialMagnitude, shellProperties.maxMagnitude);
 		}
 		else if(Input.GetButtonUp("Fire1"))
 		{
-			GameObject shell = Instantiate(shellPrefab, transform.Find("Shell Spawn").position, barrel.rotation) as GameObject;
-			shell.GetComponent<ShellProjectile>().SetForce(shellForce);
+			GameObject shell = Instantiate(shellPrefab, barrel.Find("Shell Spawn").position, barrel.rotation) as GameObject;
+			shell.GetComponent<ShellProjectile>().SetForce(barrel.forward * shellMagnitude);
 		}
 
 		//Move forward and backward

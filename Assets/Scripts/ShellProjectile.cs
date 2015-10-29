@@ -3,22 +3,26 @@ using System.Collections;
 
 public class ShellProjectile : MonoBehaviour
 {
-	Rigidbody rb;
+	public float lifetime;
 
 	void Start()
 	{
-		rb = GetComponent<Rigidbody>();
+		StartCoroutine(DestoryByTime());
+	}
+
+	IEnumerator DestoryByTime()
+	{
+		yield return new WaitForSeconds(lifetime);
+		Destroy(gameObject);
 	}
 
 	public void SetForce(Vector3 force)
 	{
-		rb.AddForce(force, ForceMode.Impulse);
+		GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
 	}
-	
-	void FixedUpdate()
+
+	void OnCollisionEnter(Collision collision)
 	{
-		Vector3 rot = rb.velocity;
-		rot.Normalize();
-		transform.rotation = Quaternion.Euler(rot.x, rot.y, rot.z);
+		Destroy(gameObject);
 	}
 }
