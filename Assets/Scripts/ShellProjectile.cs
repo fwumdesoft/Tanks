@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ShellProjectile : MonoBehaviour
 {
-	public float lifetime;
+	public float maxLifetime;
 
 	void Start()
 	{
@@ -12,17 +12,26 @@ public class ShellProjectile : MonoBehaviour
 
 	IEnumerator DestoryByTime()
 	{
-		yield return new WaitForSeconds(lifetime);
+		yield return new WaitForSeconds(maxLifetime);
 		Destroy(gameObject);
 	}
 
-	public void SetForce(Vector3 force)
+	public void Fire(Vector3 force)
 	{
 		GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
 	}
 
 	void OnCollisionEnter(Collision collision)
 	{
+		GetComponent<MeshRenderer>().enabled = false;
+		GetComponent<Collider>().enabled = false;
+		StartCoroutine(PlayExplosionAndDestroy());
+	}
+
+	IEnumerator PlayExplosionAndDestroy()
+	{
+		GetComponent<AudioSource>().Play();
+		yield return new WaitForSeconds(GetComponent<AudioSource>().clip.length);
 		Destroy(gameObject);
 	}
 }

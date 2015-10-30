@@ -25,10 +25,11 @@ public class TankController : MonoBehaviour
 	public TurretProperties turretProperties;
 	public float tankMoveSpeed = 10f;
 	public float yRotationSpeed = 10f;
+	public float shotDelay = 2f;
 
 	Rigidbody rb;
 	Transform turret, barrel, shell;
-	float shellMagnitude;
+	float shellMagnitude, deltaShotDelay;
 
 	void Start()
 	{
@@ -45,25 +46,30 @@ public class TankController : MonoBehaviour
 
 		float barrelRotX = -Input.GetAxis("Mouse Y") * turretProperties.xRotationSpeed * Time.deltaTime;
 		barrel.Rotate(barrelRotX, 0, 0);
+
+		//time between firing shells
+		deltaShotDelay += Time.deltaTime;
+		if(deltaShotDelay >= shotDelay)
+		{
+			if(Input.GetButtonDown("Fire1"))
+			{
+				shellMagnitude = shellProperties.initialMagnitude;
+			}
+			else if(Input.GetButton("Fire1"))
+			{
+				shellMagnitude += shellProperties.deltaMagnitude;
+				Mathf.Clamp(shellMagnitude, shellProperties.initialMagnitude, shellProperties.maxMagnitude);
+			}
+			else if(Input.GetButtonUp("Fire1"))
+			{
+				barrel.SendMessage("Fire", barrel.forward * shellMagnitude + rb.velocity);
+				deltaShotDelay = 0;
+			}
+		}
 	}
 
 	void FixedUpdate()
 	{
-		if(Input.GetButtonDown("Fire1"))
-		{
-			shellMagnitude = shellProperties.initialMagnitude;
-		}
-		else if(Input.GetButton("Fire1"))
-		{
-			shellMagnitude += shellProperties.deltaMagnitude;
-			Mathf.Clamp(shellMagnitude, shellProperties.initialMagnitude, shellProperties.maxMagnitude);
-		}
-		else if(Input.GetButtonUp("Fire1"))
-		{
-			GameObject shell = Instantiate(shellPrefab, barrel.Find("Shell Spawn").position, barrel.rotation) as GameObject;
-			shell.GetComponent<ShellProjectile>().SetForce(barrel.forward * shellMagnitude);
-		}
-
 		//Move forward and backward
 		float move = Input.GetAxis("Vertical") * tankMoveSpeed;
 		rb.AddForce(transform.forward * move);
