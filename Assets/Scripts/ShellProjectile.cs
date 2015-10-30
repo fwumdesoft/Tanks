@@ -31,7 +31,9 @@ public class ShellProjectile : MonoBehaviour
 	IEnumerator PlayExplosionAndDestroy()
 	{
 		GetComponent<AudioSource>().Play();
-		yield return new WaitForSeconds(GetComponent<AudioSource>().clip.length);
+		GetComponent<ParticleSystem>().Play();
+		float waitTime = Mathf.Max(GetComponent<AudioSource>().clip.length, GetComponent<ParticleSystem>().duration);
+		yield return new WaitForSeconds(waitTime);
 		Destroy(gameObject);
 	}
 }

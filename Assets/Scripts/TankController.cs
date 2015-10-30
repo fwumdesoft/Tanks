@@ -62,6 +62,7 @@ public class TankController : MonoBehaviour
 			else if(Input.GetButtonUp("Fire1"))
 			{
 				barrel.SendMessage("Fire", barrel.forward * shellMagnitude + rb.velocity);
+				shellMagnitude = shellFireSettings.initialMagnitude;
 				deltaShotDelay = 0;
 			}
 		}
