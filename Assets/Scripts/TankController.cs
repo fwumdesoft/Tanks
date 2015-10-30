@@ -13,22 +13,21 @@ public class TankController : MonoBehaviour
 	}
 
 	[System.Serializable]
-	public struct ShellProperties
+	public struct Shell
 	{
 		public float initialMagnitude;
 		public float deltaMagnitude;
 		public float maxMagnitude;
 	}
 
-	public GameObject shellPrefab;
-	public ShellProperties shellProperties;
+	public Shell shellFireSettings;
 	public TurretProperties turretProperties;
-	public float tankMoveSpeed = 10f;
-	public float yRotationSpeed = 10f;
-	public float shotDelay = 2f;
+	public float moveSpeed = 1000f;
+	[Tooltip("Rotation speed of the tank")] public float yRotationSpeed = 1f;
+	[Tooltip("Delay between shots in seconds")] public float shotDelay = 2f;
 
 	Rigidbody rb;
-	Transform turret, barrel, shell;
+	Transform turret, barrel;
 	float shellMagnitude, deltaShotDelay;
 
 	void Start()
@@ -53,12 +52,12 @@ public class TankController : MonoBehaviour
 		{
 			if(Input.GetButtonDown("Fire1"))
 			{
-				shellMagnitude = shellProperties.initialMagnitude;
+				shellMagnitude = shellFireSettings.initialMagnitude;
 			}
 			else if(Input.GetButton("Fire1"))
 			{
-				shellMagnitude += shellProperties.deltaMagnitude;
-				Mathf.Clamp(shellMagnitude, shellProperties.initialMagnitude, shellProperties.maxMagnitude);
+				shellMagnitude += shellFireSettings.deltaMagnitude * Time.deltaTime;
+				Mathf.Clamp(shellMagnitude, shellFireSettings.initialMagnitude, shellFireSettings.maxMagnitude);
 			}
 			else if(Input.GetButtonUp("Fire1"))
 			{
@@ -71,7 +70,7 @@ public class TankController : MonoBehaviour
 	void FixedUpdate()
 	{
 		//Move forward and backward
-		float move = Input.GetAxis("Vertical") * tankMoveSpeed;
+		float move = Input.GetAxis("Vertical") * moveSpeed;
 		rb.AddForce(transform.forward * move);
 
 		//Rotate tank body and counter the rotation for the turret head

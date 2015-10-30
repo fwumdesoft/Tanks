@@ -4,6 +4,7 @@ using System.Collections;
 public class FireShellScript : MonoBehaviour
 {
 	public GameObject shellPrefab;
+	public float recoil;
 
 	public void Fire(Vector3 force)
 	{
@@ -13,19 +14,19 @@ public class FireShellScript : MonoBehaviour
 
 		//change this so that barrel movement variables can be controlled in inspector
 		//also make this work properly!!
-//		transform.position = transform.position - transform.forward*0.2f;
-//		StartCoroutine(TranslateNormal());
+		transform.Translate(0, 0, -transform.forward.z*recoil);
+		StartCoroutine(TranslateNormal());
 	}
 
 	IEnumerator TranslateNormal()
 	{
-		Vector3 targetPos = transform.position + transform.forward * 0.2f;
+		Vector3 targetPos = new Vector3(0, 0, transform.localPosition.z + transform.forward.z*recoil);
 
-		float step = 0.05f;
-		for(float timePassed = 0f; timePassed < 0.2f; timePassed += step)
+		float step = Time.deltaTime;
+		for(float timePassed = 0f; timePassed < recoil; timePassed += step)
 		{
-			transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
-			yield return new WaitForSeconds(0.1f);
+			transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPos, step);
+			yield return new WaitForEndOfFrame();
 		}
 	}
 }
