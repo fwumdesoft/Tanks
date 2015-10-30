@@ -7,6 +7,6 @@ public class TankSpawner : MonoBehaviour
 
 	void Start()
 	{
-		Instantiate(tankPrefab, new Vector3(1, 0, 1)*10f, Quaternion.identity);
+		Instantiate(tankPrefab, new Vector3(1, 0.2f, 1)*10f, Quaternion.identity);
 	}
 }

@@ -12,8 +12,6 @@ public class FireShellScript : MonoBehaviour
 		GetComponent<AudioSource>().Play(); //play fire shell sound
 		shell.SendMessage("Fire", force);
 
-		//change this so that barrel movement variables can be controlled in inspector
-		//also make this work properly!!
 		transform.Translate(0, 0, -transform.forward.z*recoil);
 		StartCoroutine(TranslateNormal());
 	}
