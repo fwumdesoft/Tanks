@@ -80,4 +80,9 @@ public class TankController : MonoBehaviour
 		turret.Rotate(0, -tankRotate, 0);
 		Camera.main.transform.RotateAround(turret.position, turret.up, -tankRotate);
 	}
+
+	public void Die()
+	{
+		Destroy(gameObject);
+	}
 }

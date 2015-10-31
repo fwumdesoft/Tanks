@@ -23,8 +23,13 @@ public class ShellProjectile : MonoBehaviour
 
 	void OnCollisionEnter(Collision collision)
 	{
+		//tell the tank to die! (and consequently everything else the collider hits)
+		collision.collider.SendMessageUpwards("Die", SendMessageOptions.DontRequireReceiver);
+
 		GetComponent<MeshRenderer>().enabled = false;
 		GetComponent<Collider>().enabled = false;
+		GetComponent<Rigidbody>().velocity = Vector3.zero;
+		GetComponent<Rigidbody>().AddExplosionForce(300f, transform.position, 4f);
 		StartCoroutine(PlayExplosionAndDestroy());
 	}
 
