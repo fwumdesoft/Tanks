@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.Networking;
 
-public class TankController : NetworkBehaviour
+public class TankController : MonoBehaviour
 {
 	[System.Serializable]
 	public struct TurretProperties
@@ -33,24 +33,20 @@ public class TankController : NetworkBehaviour
 
 	void Start()
 	{
-		transform.position = transform.position + new Vector3(1, 0, 1) * 10f;
 		rb = GetComponent<Rigidbody>();
 		turret = transform.Find("Turret");
 		barrel = turret.Find("Turret Barrel");
-
 		Camera.main.transform.rotation = Quaternion.Euler(11, 0, 0);
-		Cursor.lockState = CursorLockMode.Locked;
 	}
 
 	void Update()
 	{
-		if(!isLocalPlayer)
-			return;
-
+		//rotate turret around y axis and move camera to follow
 		float turretRotY = Input.GetAxis("Mouse X") * turretProperties.yRotationSpeed * Time.deltaTime;
 		turret.Rotate(0, turretRotY, 0);
-		Camera.main.transform.RotateAround(turret.position, turret.up, turretRotY);
+		Camera.main.transform.RotateAround(turret.position, Vector3.up, turretRotY);
 
+		//rotate barrel up and down
 		float barrelRotX = -Input.GetAxis("Mouse Y") * turretProperties.xRotationSpeed * Time.deltaTime;
 		barrel.Rotate(barrelRotX, 0, 0);
 		//clamp turret rotation at some point!
@@ -59,7 +55,7 @@ public class TankController : NetworkBehaviour
 		float tankRotate = Input.GetAxis("Horizontal") * yRotationSpeed;
 		transform.Rotate(0, tankRotate, 0);
 		turret.Rotate(0, -tankRotate, 0);
-		
+
 		Camera.main.transform.position = transform.position;
 		Camera.main.transform.Translate(new Vector3(0f, 2f, -5.8f));
 
@@ -87,9 +83,6 @@ public class TankController : NetworkBehaviour
 
 	void FixedUpdate()
 	{
-		if(!isLocalPlayer)
-			return;
-
 		//Move forward and backward
 		float move = Input.GetAxis("Vertical") * moveSpeed;
 		rb.AddForce(transform.forward * move);

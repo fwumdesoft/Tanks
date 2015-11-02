@@ -1,15 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AITankController : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
+public class AITankController : TankController
+{
+	void Start()
+	{
 	
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	void Update()
+	{
 	
+	}
+
+	void FixedUpdate()
+	{
+
 	}
 }

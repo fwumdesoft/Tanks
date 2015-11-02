@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.Networking;
 
-public class ShellProjectile : NetworkBehaviour
+public class ShellProjectile : MonoBehaviour
 {
 	public float maxLifetime;
 
@@ -20,7 +20,6 @@ public class ShellProjectile : NetworkBehaviour
 	public void Fire(Vector3 force)
 	{
 		GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
-		NetworkServer.Spawn(gameObject);
 	}
 
 	void OnCollisionEnter(Collision collision)
