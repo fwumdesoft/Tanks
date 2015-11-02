@@ -72,7 +72,7 @@ public class TankController : MonoBehaviour
 			else if(Input.GetButton("Fire1"))
 			{
 				shellMagnitude += shellFireSettings.deltaMagnitude * Time.deltaTime;
-				Mathf.Clamp(shellMagnitude, shellFireSettings.initialMagnitude, shellFireSettings.maxMagnitude);
+				shellMagnitude = Mathf.Clamp(shellMagnitude, shellFireSettings.initialMagnitude, shellFireSettings.maxMagnitude);
 				powerBar.value = shellMagnitude / shellFireSettings.maxMagnitude;
 			}
 			else if(Input.GetButtonUp("Fire1"))
