@@ -22,7 +22,7 @@ public class TankController : MonoBehaviour
 		public float maxMagnitude;
 	}
 
-	public Slider powerBar;
+	public Slider powerBar, delayBar;
 	public Shell shellFireSettings;
 	public TurretProperties turretProperties;
 	public float moveSpeed = 1000f;
@@ -63,6 +63,7 @@ public class TankController : MonoBehaviour
 
 		//time between firing shells
 		deltaShotDelay += Time.deltaTime;
+		delayBar.value += Time.deltaTime / shotDelay;
 		if(deltaShotDelay >= shotDelay)
 		{
 			if(Input.GetButtonDown("Fire1"))
@@ -81,7 +82,21 @@ public class TankController : MonoBehaviour
 				shellMagnitude = shellFireSettings.initialMagnitude;
 				deltaShotDelay = 0;
 				powerBar.value = 0;
+				delayBar.value = 0;
 			}
+		}
+
+		if(Input.GetKeyDown(KeyCode.LeftShift))
+		{
+			StopCoroutine("GradualFOVChange");
+			transform.Find("Tank Body").Find("Afterburner").GetComponent<ParticleSystem>().Play();
+			StartCoroutine("GradualFOVChange", 100);
+		}
+		if(Input.GetKeyUp(KeyCode.LeftShift))
+		{
+			StopCoroutine("GradualFOVChange");
+			transform.Find("Tank Body").Find("Afterburner").GetComponent<ParticleSystem>().Stop();
+			StartCoroutine("GradualFOVChange", 60);
 		}
 	}
 
@@ -90,6 +105,20 @@ public class TankController : MonoBehaviour
 		//Move forward and backward
 		float move = Input.GetAxis("Vertical") * moveSpeed;
 		rb.AddForce(transform.forward * move);
+	}
+
+	IEnumerator GradualFOVChange(float target)
+	{
+		while(target > Camera.main.fieldOfView)
+		{
+			Camera.main.fieldOfView += Time.deltaTime * 100f;
+			yield return new WaitForEndOfFrame();
+		}
+		while(target < Camera.main.fieldOfView)
+		{
+			Camera.main.fieldOfView -= Time.deltaTime * 100f;
+			yield return new WaitForEndOfFrame();
+		}
 	}
 
 	public void Die()
