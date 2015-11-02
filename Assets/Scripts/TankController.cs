@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class TankController : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class TankController : MonoBehaviour
 		public float maxMagnitude;
 	}
 
+	public Slider powerBar;
 	public Shell shellFireSettings;
 	public TurretProperties turretProperties;
 	public float moveSpeed = 1000f;
@@ -71,12 +73,14 @@ public class TankController : MonoBehaviour
 			{
 				shellMagnitude += shellFireSettings.deltaMagnitude * Time.deltaTime;
 				Mathf.Clamp(shellMagnitude, shellFireSettings.initialMagnitude, shellFireSettings.maxMagnitude);
+				powerBar.value = shellMagnitude / shellFireSettings.maxMagnitude;
 			}
 			else if(Input.GetButtonUp("Fire1"))
 			{
 				barrel.SendMessage("Fire", barrel.forward * shellMagnitude + rb.velocity);
 				shellMagnitude = shellFireSettings.initialMagnitude;
 				deltaShotDelay = 0;
+				powerBar.value = 0;
 			}
 		}
 	}
