@@ -22,7 +22,8 @@ public class TankController : MonoBehaviour
 		public float maxMagnitude;
 	}
 
-	public Slider powerBar, delayBar;
+	public Slider powerBar, delayBar, boostBar;
+	public float boostTime;
 	public Shell shellFireSettings;
 	public TurretProperties turretProperties;
 	public float moveSpeed = 1000f;
