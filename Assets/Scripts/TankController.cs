@@ -52,7 +52,13 @@ public class TankController : MonoBehaviour
 		//rotate barrel up and down
 		float barrelRotX = -Input.GetAxis("Mouse Y") * turretProperties.xRotationSpeed * Time.deltaTime;
 		barrel.Rotate(barrelRotX, 0, 0);
-		//clamp turret rotation at some point!
+		if (barrel.localEulerAngles.x < 310 && barrel.localEulerAngles.x > 260) {
+			Quaternion toRot = Quaternion.Euler (new Vector3 (311, 0, 0));
+			barrel.localRotation = toRot;
+		} else if (barrel.localEulerAngles.x > 0 && barrel.localEulerAngles.x < 50) {
+			Quaternion toRot = Quaternion.Euler (new Vector3 (1, 0, 0));
+			barrel.localRotation = toRot;
+		}
 
 		//Rotate tank body and counter the rotation for the turret head
 		float tankRotate = Input.GetAxis("Horizontal") * yRotationSpeed;
@@ -62,7 +68,7 @@ public class TankController : MonoBehaviour
 		Camera.main.transform.position = transform.position;
 		Camera.main.transform.Translate(new Vector3(0f, 2f, -5.8f));
 
-		//time between firing shells
+		//controls time between firing shells
 		deltaShotDelay += Time.deltaTime;
 		delayBar.value += Time.deltaTime / shotDelay;
 		if(deltaShotDelay >= shotDelay)
@@ -87,6 +93,7 @@ public class TankController : MonoBehaviour
 			}
 		}
 
+		//Controls the afterburner toggle
 		if(Input.GetKeyDown(KeyCode.LeftShift))
 		{
 			StopCoroutine("GradualFOVChange");
