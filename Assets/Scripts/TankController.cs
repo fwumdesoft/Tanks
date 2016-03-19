@@ -52,6 +52,7 @@ public class TankController : MonoBehaviour
 		//rotate barrel up and down
 		float barrelRotX = -Input.GetAxis("Mouse Y") * turretProperties.xRotationSpeed * Time.deltaTime;
 		barrel.Rotate(barrelRotX, 0, 0);
+		//clamp the barrel rotation
 		if (barrel.localEulerAngles.x < 310 && barrel.localEulerAngles.x > 260) {
 			Quaternion toRot = Quaternion.Euler (new Vector3 (311, 0, 0));
 			barrel.localRotation = toRot;
