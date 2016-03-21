@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AITankController : TankController
+public class AITankController : MonoBehaviour
 {
 	public float deltaTurretRotation;
 
 	Rigidbody rb;
-	Transform turret, barrel;
-	Vector3 playerPos;
+	Transform turret, barrel, player;
 
 	void Start() {
 		rb = GetComponent<Rigidbody>();
@@ -16,11 +15,10 @@ public class AITankController : TankController
 	}
 
 	void Update() {
-		playerPos = GameObject.FindGameObjectWithTag("Player").transform.position;
-		Vector3 toPlayer = playerPos - turret.position;
+		player = GameObject.FindGameObjectWithTag("Player").transform;
+		Vector3 toPlayer = player.position - turret.position;
 
-		Quaternion newRot = Quaternion.FromToRotation(turret.localPosition, toPlayer);
-		turret.rotation = newRot;
+
 	}
 
 	void FixedUpdate() {
