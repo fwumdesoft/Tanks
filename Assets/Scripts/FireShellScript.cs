@@ -16,6 +16,7 @@ public class FireShellScript : MonoBehaviour
 		StartCoroutine(TranslateNormal());
 	}
 
+	//Give the barrel some recoil
 	IEnumerator TranslateNormal()
 	{
 		Vector3 targetPos = new Vector3(0, 0, transform.localPosition.z + transform.forward.z*recoil);

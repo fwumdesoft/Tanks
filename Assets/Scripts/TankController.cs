@@ -10,8 +10,7 @@ public class TankController : MonoBehaviour
 	{
 		public float xRotationSpeed;
 		public float yRotationSpeed;
-		public float xMinRotation;
-		public float xMaxRotation;
+		public float maxFiringAngle;
 	}
 
 	[System.Serializable]
@@ -53,11 +52,11 @@ public class TankController : MonoBehaviour
 		float barrelRotX = -Input.GetAxis("Mouse Y") * turretProperties.xRotationSpeed * Time.deltaTime;
 		barrel.Rotate(barrelRotX, 0, 0);
 		//clamp the barrel rotation
-		if (barrel.localEulerAngles.x < 310 && barrel.localEulerAngles.x > 260) {
-			Quaternion toRot = Quaternion.Euler (new Vector3 (311, 0, 0));
+		if(barrel.localEulerAngles.x < 360-turretProperties.maxFiringAngle && barrel.localEulerAngles.x > 260-turretProperties.maxFiringAngle) {
+			Quaternion toRot = Quaternion.Euler(new Vector3(360-turretProperties.maxFiringAngle, 0, 0));
 			barrel.localRotation = toRot;
-		} else if (barrel.localEulerAngles.x > 0 && barrel.localEulerAngles.x < 50) {
-			Quaternion toRot = Quaternion.Euler (new Vector3 (1, 0, 0));
+		} else if(barrel.localEulerAngles.x > 0 && barrel.localEulerAngles.x < 50) {
+			Quaternion toRot = Quaternion.Euler(new Vector3(1, 0, 0));
 			barrel.localRotation = toRot;
 		}
 
