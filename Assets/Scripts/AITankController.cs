@@ -50,21 +50,21 @@ public class AITankController : MonoBehaviour
 		//Calculate the angle and magnitude to fire the shell at to maximize time efficiency
 		Vector3 firingForce = new Vector3(0, 0, 0);
 		if(toPlayer.magnitude <= maxFiringDistance) {
-			for(float theta = 1; theta < turretProperties.maxFiringAngle; theta += 1) {
+			for(int deg = 1; deg < turretProperties.maxFiringAngle; deg++) {
 				for(int mag = 1; mag < shellFireSettings.maxMagnitude; mag++) {
+					float theta = deg * Mathf.Deg2Rad;
 					float firingDistance = CalcFireRange(mag, theta);
-					if(firingDistance > toPlayer.magnitude-5 && firingDistance < toPlayer.magnitude+5) {
-						theta *= Mathf.Deg2Rad;
+					if(firingDistance > toPlayer.magnitude-3 && firingDistance < toPlayer.magnitude+3) {
 						firingForce = new Vector3(0, mag*Mathf.Sin(theta), mag*Mathf.Cos(theta));
+						goto exit;
 					}
 				}
 			}
 		}
-
-		Debug.Log(firingForce); //INTERPOLATE THE FIRING ANGLE TO ENSURE THE TANK FIRES AT THE RIGHT ANGLE
+		exit:
 
 		//Determine if a shell can be fired and begin charging shell
-		deltaShotDelay += Time.deltaTime;
+		//deltaShotDelay += Time.deltaTime;
 		if(deltaShotDelay > shotDelay) {
 			if(firingForce.sqrMagnitude != 0) {
 				deltaFireMagnitude += shellFireSettings.deltaMagnitude * Time.deltaTime;
